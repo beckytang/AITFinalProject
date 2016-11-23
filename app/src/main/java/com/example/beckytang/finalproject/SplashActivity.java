@@ -62,7 +62,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void onShutterEnd() {
-        Intent intentMain = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intentMain = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intentMain);
 
         t.cancel();
