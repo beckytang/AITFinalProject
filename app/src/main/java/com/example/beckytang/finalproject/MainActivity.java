@@ -3,11 +3,13 @@ package com.example.beckytang.finalproject;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
@@ -22,8 +24,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -174,6 +186,10 @@ public class MainActivity extends AppCompatActivity
 
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
+
+        storePictureFB(imageFileName, mCurrentPhotoPath);
+
+
         return image;
     }
 
@@ -197,7 +213,61 @@ public class MainActivity extends AppCompatActivity
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
 
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        ivNewPicture.setImageBitmap(bitmap);
+        /**Bitmap bmp = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        Matrix mat = new Matrix();
+        int angle = 90;
+
+        mat.postRotate(angle);
+        Bitmap bitmap = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), mat, true);
+        ivNewPicture.setImageBitmap(bitmap);*/
+
+        Bitmap bmp = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        Matrix mat = new Matrix();
+        mat.postRotate(270);
+        Bitmap rtBmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(),
+                bmp.getHeight(), mat, true);
+        ByteArrayOutputStream outstudentstreamOutputStream = new ByteArrayOutputStream();
+        rtBmp.compress(Bitmap.CompressFormat.PNG, 100,
+                outstudentstreamOutputStream);
+
+        ivNewPicture.setImageBitmap(rtBmp);
+
+
+
+
     }
+
+    private void storePictureFB(String imageFileName, String currentPath) throws FileNotFoundException {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://aitfinalproject.appspot.com");
+        StorageReference tempRef = storageRef.child(imageFileName);
+        String referenceName = "images/"+imageFileName;
+        StorageReference tempImagesRef = storageRef.child(referenceName);
+
+        ivNewPicture.setDrawingCacheEnabled(true);
+        ivNewPicture.buildDrawingCache();
+        Bitmap bitmap = ivNewPicture.getDrawingCache();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = tempRef.putBytes(data);
+        InputStream stream = new FileInputStream(new File(currentPath));
+        uploadTask = tempRef.putStream(stream);
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+            }
+        });
+
+    }
+
 }
