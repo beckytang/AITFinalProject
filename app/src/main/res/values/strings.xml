@@ -1,8 +1,14 @@
 <resources>
-    <string name="app_name">Final Project</string>
+    <string name="app_name">SnapMap</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="title_activity_maps">Albums around you</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_register">Register</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="nav_header_subtext">Welcome to our haus. We hope you enjoy ur stay</string>
 </resources>

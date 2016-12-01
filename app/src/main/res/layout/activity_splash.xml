@@ -11,41 +11,41 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/app_logo" />
+        android:src="@drawable/ic_logo" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivLogo"
-        android:text="Name"
-        android:textSize="60sp"
-        android:textColor="#000000"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:text="@string/app_name"
+        android:textColor="@color/colorAccent"
+        android:textSize="60sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="1"
+        android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:layout_centerInParent="true">
+        android:weightSum="1">
 
-    <TextView
-        android:id="@+id/tvTopShutter"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".5"
-        android:background="#000000"
-        android:visibility="invisible"
-        android:layout_alignParentTop="true"/>
+        <TextView
+            android:id="@+id/tvTopShutter"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_alignParentTop="true"
+            android:layout_weight=".5"
+            android:background="#000000"
+            android:visibility="invisible" />
 
-    <TextView
-        android:id="@+id/tvBottomShutter"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".5"
-        android:background="#000000"
-        android:visibility="invisible"
-        android:layout_alignParentBottom="true"/>
+        <TextView
+            android:id="@+id/tvBottomShutter"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_alignParentBottom="true"
+            android:layout_weight=".5"
+            android:background="#000000"
+            android:visibility="invisible" />
 
     </LinearLayout>
 
