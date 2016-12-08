@@ -114,6 +114,8 @@ public class MainActivity extends BaseActivity
         galleryRecyclerAdapter = new GalleryRecyclerAdapter(MainActivity.this, galleryData);
         recyclerList.setAdapter(galleryRecyclerAdapter);
 
+        recyclerList.addOnItemTouchListener(new RecyclerIt);
+
         ivNewPicture = (ImageView) findViewById(R.id.ivNewPicture);
     }
 

@@ -26,6 +26,7 @@ public class GalleryRecyclerAdapter extends
     private Context context;
 
     public GalleryRecyclerAdapter(MainActivity mainActivity, ArrayList<ImageModel> galleryData) {
+        photoList = new ArrayList<>();
        // photoList = ImageModel.listAll(ImageModel.class);
     }
 

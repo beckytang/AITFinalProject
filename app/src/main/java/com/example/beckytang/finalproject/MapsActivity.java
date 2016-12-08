@@ -47,11 +47,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         firstLocationUpdate = true;
 
         albumList = new ArrayList<>();
-        albumList.add(new Album("AIT", new LatLng(47.562441, 19.054716)));
-        albumList.add(new Album("Metro", new LatLng(47.565648, 19.049949)));
-        albumList.add(new Album("Budapest", new LatLng(47.509176, 19.076193)));
-        albumList.add(new Album("Hungary", new LatLng(47.355107, 19.059543)));
-        albumList.add(new Album("Greenwich", new LatLng(0, 0)));
+        albumList.add(new Album("AIT", 47.562441, 19.054716));
+        albumList.add(new Album("Metro", 47.565648, 19.049949));
+        albumList.add(new Album("Budapest", 47.509176, 19.076193));
+        albumList.add(new Album("Hungary", 47.355107, 19.059543));
+        albumList.add(new Album("Greenwich", 0, 0));
 
         myLocationManager = new MyLocationManager(this, getApplicationContext());
         requestNeededPermission();
@@ -63,6 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setOnMarkerClickListener(this);
     }
 
     public void requestNeededPermission() {
@@ -160,6 +161,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         result.putExtra(KEY_ALBUM, newAlbum);
         setResult(RESULT_OK, result);
         finish();
-        return false;
+
+        return true;
     }
 }

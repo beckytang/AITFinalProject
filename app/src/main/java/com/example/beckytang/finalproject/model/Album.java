@@ -8,15 +8,16 @@ import java.util.List;
 public class Album implements Serializable{
 
     private String name;
-    private LatLng location;
-    private List<Photo> photoList;
+    private double latitude;
+    private double longitude;
 
     public Album() {
     }
 
-    public Album(String name, LatLng location) {
+    public Album(String name, double latitude, double longitude) {
         this.name = name;
-        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getName() {
@@ -27,19 +28,23 @@ public class Album implements Serializable{
         this.name = name;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
     public LatLng getLocation() {
-        return location;
-    }
-
-    public void setLocation(LatLng location) {
-        this.location = location;
-    }
-
-    public List<Photo> getPhotoList() {
-        return photoList;
-    }
-
-    public void setPhotoList(List<Photo> photoList) {
-        this.photoList = photoList;
+        return new LatLng(latitude, longitude);
     }
 }
