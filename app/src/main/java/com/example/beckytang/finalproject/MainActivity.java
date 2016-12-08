@@ -7,6 +7,7 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -27,7 +28,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.beckytang.finalproject.model.Album;
 import com.example.beckytang.finalproject.adapter.GalleryRecyclerAdapter;
+import com.example.beckytang.finalproject.adapter.GalleryTouchHelper;
 import com.example.beckytang.finalproject.adapter.ImageModel;
+import com.example.beckytang.finalproject.model.DetailActivity;
 import com.example.beckytang.finalproject.model.Photo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -114,7 +117,19 @@ public class MainActivity extends BaseActivity
         galleryRecyclerAdapter = new GalleryRecyclerAdapter(MainActivity.this, galleryData);
         recyclerList.setAdapter(galleryRecyclerAdapter);
 
-        recyclerList.addOnItemTouchListener(new RecyclerIt);
+        recyclerList.addOnItemTouchListener(new GalleryTouchHelper(this,
+                new GalleryTouchHelper.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                        intent.putParcelableArrayListExtra("data", galleryData);
+                        intent.putExtra("pos", position);
+                        startActivity(intent);
+
+                    }
+                }));
 
         ivNewPicture = (ImageView) findViewById(R.id.ivNewPicture);
     }

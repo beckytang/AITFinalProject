@@ -11,4 +11,6 @@
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
     <string name="nav_header_subtext">Welcome to our haus. We hope you enjoy ur stay</string>
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>
