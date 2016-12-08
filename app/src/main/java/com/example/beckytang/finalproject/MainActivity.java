@@ -44,6 +44,7 @@ public class MainActivity extends BaseActivity
 
     public static final int REQUEST_TAKE_PHOTO = 1;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    public static final int REQUEST_CODE_ALBUM = 2;
     private ImageView ivNewPicture;
     private String mCurrentPhotoPath;
     private String fileName;
@@ -166,62 +167,19 @@ public class MainActivity extends BaseActivity
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-
             try {
                 storePictureFB(fileName, mCurrentPhotoPath);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-
-            //setIvSrc();
-            //Photo newPhoto = createPhoto();
         }
     }
 
     private Photo createPhoto(String url) {
-        //FirebaseStorage storage = FirebaseStorage.getInstance();
-        //StorageReference storageRef = storage.getReferenceFromUrl("gs://aitfinalproject.appspot.com");
-        // return new photo object with a reference to the url
-        return new Photo(url);
+        return new Photo(url, getUid());
     }
 
     private void setIvSrc(String url) {
-        /*
-        int targetW = ivNewPicture.getWidth();
-        int targetH = ivNewPicture.getHeight();
-
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bmp = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        Matrix mat = new Matrix();
-        mat.postRotate(270);
-        Bitmap rtBmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(),
-                bmp.getHeight(), mat, true);
-
-        ivNewPicture.setImageBitmap(rtBmp);
-
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef =
-                storage.getReferenceFromUrl("gs://aitfinalproject.appspot.com");
-        StorageReference imageRef = storageRef.child(fileName);
-
-
-        Glide.with(MainActivity.this)
-                .using(new FirebaseImageLoader())
-                .load(imageRef)
-                .into(ivNewPicture);
-                */
         Glide.with(MainActivity.this)
                 .load(url)
                 .into(ivNewPicture);
@@ -233,7 +191,9 @@ public class MainActivity extends BaseActivity
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef =
                 storage.getReferenceFromUrl("gs://aitfinalproject.appspot.com");
-        StorageReference tempRef = storageRef.child(imageFileName);
+        StorageReference tempRef = storageRef
+                .child("images")
+                .child(imageFileName);
 
         Bitmap bmp = BitmapFactory.decodeFile(mCurrentPhotoPath);
         Matrix mat = new Matrix();
@@ -252,7 +212,8 @@ public class MainActivity extends BaseActivity
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // HANDLE ON FAILURE
+                Toast.makeText(MainActivity.this, "There was a problem uploading your photo",
+                        Toast.LENGTH_SHORT).show();
                 hideProgressDialog();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -264,6 +225,11 @@ public class MainActivity extends BaseActivity
                 hideProgressDialog();
             }
         });
+    }
+
+    public void dispatchChooseAlbumIntent() {
+        Intent chooseAlbumIntent = new Intent(MainActivity.this, MapsActivity.class);
+        startActivityForResult(chooseAlbumIntent, REQUEST_CODE_ALBUM);
     }
 
 }

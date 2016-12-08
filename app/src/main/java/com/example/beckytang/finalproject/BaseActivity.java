@@ -13,7 +13,6 @@ public class BaseActivity extends AppCompatActivity {
     public void showProgressDialog() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
-            //progressDialog.setCancelable(false);
             progressDialog.setMessage("Loading...");
         }
 
@@ -33,7 +32,6 @@ public class BaseActivity extends AppCompatActivity {
     public String getUserName() {
         return FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
     }
-
 
     public String getUserEmail() {
         return FirebaseAuth.getInstance().getCurrentUser().getEmail();

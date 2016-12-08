@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -38,6 +39,9 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
 
         ButterKnife.bind(this);
+
+        this.getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -94,7 +98,6 @@ public class LoginActivity extends BaseActivity {
                 hideProgressDialog();
 
                 if (task.isSuccessful()) {
-                    // Open new Activity
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
                 } else {

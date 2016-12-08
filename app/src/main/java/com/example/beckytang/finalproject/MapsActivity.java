@@ -1,6 +1,7 @@
 package com.example.beckytang.finalproject;
 
 import android.*;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
-        MyLocationManager.OnLocChaned {
+        MyLocationManager.OnLocChaned, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private MyLocationManager myLocationManager = null;
@@ -131,7 +132,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (withinRange(album.getLocation(), range)) {
                 mMap.addMarker(new MarkerOptions()
                         .position(album.getLocation())
-                        .title(album.getName()));
+                        .title(album.getName()))
+                .showInfoWindow();
             }
         }
     }
@@ -148,4 +150,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return results[0] <= range;
     }
 
+    public void onSelected(Album album) {
+
+
+        Intent result = new Intent();
+        result.putExtra("KEY_ALBUM", album);
+        setResult(RESULT_OK, result);
+        finish();
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        return false;
+    }
 }
