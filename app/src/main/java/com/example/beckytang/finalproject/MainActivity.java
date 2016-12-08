@@ -4,36 +4,28 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.beckytang.finalproject.model.Photo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -47,7 +39,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final int REQUEST_TAKE_PHOTO = 1;
@@ -55,7 +47,7 @@ public class MainActivity extends AppCompatActivity
     private ImageView ivNewPicture;
     private String mCurrentPhotoPath;
     private String fileName;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,9 +114,11 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_map) {
             startActivity(new Intent(this, MapsActivity.class));
         } else if (id == R.id.nav_slideshow) {
-
+            Glide.with(this)
+                    .load("http://www.w3schools.com/css/trolltunga.jpg")
+                    .into(ivNewPicture);
         } else if (id == R.id.nav_manage) {
-
+            //setIvSrc();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -157,7 +151,7 @@ public class MainActivity extends AppCompatActivity
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        String imageFileName = "JPEG_" + timeStamp + "_" + getUid();
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,
@@ -172,17 +166,27 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            setIvBitmap();
 
             try {
                 storePictureFB(fileName, mCurrentPhotoPath);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+
+            //setIvSrc();
+            //Photo newPhoto = createPhoto();
         }
     }
 
-    private void setIvBitmap() {
+    private Photo createPhoto(String url) {
+        //FirebaseStorage storage = FirebaseStorage.getInstance();
+        //StorageReference storageRef = storage.getReferenceFromUrl("gs://aitfinalproject.appspot.com");
+        // return new photo object with a reference to the url
+        return new Photo(url);
+    }
+
+    private void setIvSrc(String url) {
+        /*
         int targetW = ivNewPicture.getWidth();
         int targetH = ivNewPicture.getHeight();
 
@@ -206,10 +210,26 @@ public class MainActivity extends AppCompatActivity
                 bmp.getHeight(), mat, true);
 
         ivNewPicture.setImageBitmap(rtBmp);
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef =
+                storage.getReferenceFromUrl("gs://aitfinalproject.appspot.com");
+        StorageReference imageRef = storageRef.child(fileName);
+
+
+        Glide.with(MainActivity.this)
+                .using(new FirebaseImageLoader())
+                .load(imageRef)
+                .into(ivNewPicture);
+                */
+        Glide.with(MainActivity.this)
+                .load(url)
+                .into(ivNewPicture);
     }
 
     private void storePictureFB(String imageFileName, String currentPath)
             throws FileNotFoundException {
+        showProgressDialog();
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef =
                 storage.getReferenceFromUrl("gs://aitfinalproject.appspot.com");
@@ -233,11 +253,15 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // HANDLE ON FAILURE
+                hideProgressDialog();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                String downloadUrl = taskSnapshot.getDownloadUrl().toString();
+                createPhoto(downloadUrl);
+                setIvSrc(downloadUrl);
+                hideProgressDialog();
             }
         });
     }
