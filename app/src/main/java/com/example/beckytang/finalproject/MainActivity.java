@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.beckytang.finalproject.model.Album;
 import com.example.beckytang.finalproject.adapter.GalleryRecyclerAdapter;
 import com.example.beckytang.finalproject.adapter.GalleryTouchHelper;
 import com.example.beckytang.finalproject.adapter.ImageModel;
@@ -75,6 +76,7 @@ public class MainActivity extends BaseActivity
     private ImageView ivNewPicture;
     private String mCurrentPhotoPath;
     private String fileName;
+    private Album album;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,11 +224,20 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            try {
-                storePictureFB(fileName, mCurrentPhotoPath);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+        if (resultCode == RESULT_OK) {
+
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                dispatchChooseAlbumIntent();
+            }
+
+            if (requestCode == REQUEST_CODE_ALBUM) {
+                album = (Album) data.getSerializableExtra(MapsActivity.KEY_ALBUM);
+
+                try {
+                    storePictureFB(fileName, mCurrentPhotoPath);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

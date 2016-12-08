@@ -27,6 +27,7 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         MyLocationManager.OnLocChaned, GoogleMap.OnMarkerClickListener {
 
+    public static final String KEY_ALBUM = "KEY_ALBUM";
     private GoogleMap mMap;
     private MyLocationManager myLocationManager = null;
     private Location myLocation = null;
@@ -130,10 +131,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void showAlbumsInRange(int range) {
         for (Album album : albumList) {
             if (withinRange(album.getLocation(), range)) {
-                mMap.addMarker(new MarkerOptions()
+                Marker mMarker = mMap.addMarker(new MarkerOptions()
                         .position(album.getLocation())
-                        .title(album.getName()))
-                .showInfoWindow();
+                        .title(album.getName()));
+                mMarker.showInfoWindow();
+                mMarker.setTag(album);
             }
         }
     }
@@ -150,18 +152,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return results[0] <= range;
     }
 
-    public void onSelected(Album album) {
-
-
-        Intent result = new Intent();
-        result.putExtra("KEY_ALBUM", album);
-        setResult(RESULT_OK, result);
-        finish();
-    }
-
     @Override
     public boolean onMarkerClick(Marker marker) {
+        Album newAlbum = (Album) marker.getTag();
 
+        Intent result = new Intent();
+        result.putExtra(KEY_ALBUM, newAlbum);
+        setResult(RESULT_OK, result);
+        finish();
         return false;
     }
 }
