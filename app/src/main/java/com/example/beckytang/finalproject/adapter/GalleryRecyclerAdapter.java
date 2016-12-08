@@ -10,8 +10,10 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.beckytang.finalproject.MainActivity;
 import com.example.beckytang.finalproject.R;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,7 +25,7 @@ public class GalleryRecyclerAdapter extends
     private List<ImageModel> photoList;
     private Context context;
 
-    public GalleryRecyclerAdapter() {
+    public GalleryRecyclerAdapter(MainActivity mainActivity, ArrayList<ImageModel> galleryData) {
        // photoList = ImageModel.listAll(ImageModel.class);
     }
 
