@@ -27,6 +27,7 @@ public class GalleryRecyclerAdapter extends
 
     public GalleryRecyclerAdapter(MainActivity mainActivity, ArrayList<ImageModel> galleryData) {
         photoList = new ArrayList<>();
+        photoList = galleryData;
        // photoList = ImageModel.listAll(ImageModel.class);
     }
 

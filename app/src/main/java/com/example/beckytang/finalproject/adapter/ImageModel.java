@@ -3,10 +3,6 @@ package com.example.beckytang.finalproject.adapter;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by beckytang on 12/8/16.
- */
-
 public class ImageModel implements Parcelable {
     String photoName;
     String url;
