@@ -74,6 +74,7 @@ public class MainActivity extends BaseActivity
     private String mCurrentPhotoPath;
     private String fileName;
     private Album album;
+    private String albumName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,12 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        setUpGallery();
+
+        ivNewPicture = (ImageView) findViewById(R.id.ivNewPicture);
+    }
+
+    private void setUpGallery() {
         for (int i = 0; i < IMGS.length; i++) {
             //adding images and title to POJO class and storing into array
             Photo photo = new Photo();
@@ -127,8 +134,6 @@ public class MainActivity extends BaseActivity
 
                     }
                 }));
-
-        ivNewPicture = (ImageView) findViewById(R.id.ivNewPicture);
     }
 
     @Override
@@ -228,7 +233,7 @@ public class MainActivity extends BaseActivity
             }
 
             if (requestCode == REQUEST_CODE_ALBUM) {
-                album = (Album) data.getSerializableExtra(MapsActivity.KEY_ALBUM);
+                albumName = data.getStringExtra(MapsActivity.KEY_ALBUM);
 
                 try {
                     storePictureFB(fileName, mCurrentPhotoPath);
@@ -257,6 +262,7 @@ public class MainActivity extends BaseActivity
                 storage.getReferenceFromUrl("gs://aitfinalproject.appspot.com");
         StorageReference tempRef = storageRef
                 .child("images")
+                .child(albumName)
                 .child(imageFileName);
 
         Bitmap bmp = BitmapFactory.decodeFile(mCurrentPhotoPath);

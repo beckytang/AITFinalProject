@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.beckytang.finalproject.location.MyLocationManager;
@@ -28,6 +29,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         MyLocationManager.OnLocChaned, GoogleMap.OnMarkerClickListener {
 
     public static final String KEY_ALBUM = "KEY_ALBUM";
+    public static final int RANGE = 10000;
     private GoogleMap mMap;
     private MyLocationManager myLocationManager = null;
     private Location myLocation = null;
@@ -64,6 +66,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnMarkerClickListener(this);
+        // ADD LOADING UNITL FIRST LOCATION UPDATE
+
     }
 
     public void requestNeededPermission() {
@@ -119,14 +123,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.clear();
 
-        mMap.addMarker(new MarkerOptions().position(mLatLng).title("Current Location"));
+        // mMap.setMyLocationEnabled(true);
+        // ADD CURRENT LOCATION MARKER
         if (firstLocationUpdate) {
             firstLocationUpdate = false;
             mMap.moveCamera(CameraUpdateFactory.newLatLng(mLatLng));
             mMap.moveCamera(CameraUpdateFactory.zoomTo(13));
         }
 
-        showAlbumsInRange(10000);
+        showAlbumsInRange(RANGE);
     }
 
     private void showAlbumsInRange(int range) {
@@ -136,7 +141,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .position(album.getLocation())
                         .title(album.getName()));
                 mMarker.showInfoWindow();
-                mMarker.setTag(album);
+                mMarker.setTag(album.getName());
+                //mMarker.setTag(album);
             }
         }
     }
@@ -155,10 +161,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Album newAlbum = (Album) marker.getTag();
+        //Album newAlbum = (Album) marker.getTag();
+        String albumName = (String) marker.getTag();
+        //Log.d("TAG_ALBUM", ""+ newAlbum.getName());
 
         Intent result = new Intent();
-        result.putExtra(KEY_ALBUM, newAlbum);
+        result.putExtra(KEY_ALBUM, albumName);
+        //result.putExtra(KEY_ALBUM, newAlbum);
         setResult(RESULT_OK, result);
         finish();
 
