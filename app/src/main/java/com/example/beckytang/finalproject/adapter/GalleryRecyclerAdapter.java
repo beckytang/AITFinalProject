@@ -12,29 +12,28 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.beckytang.finalproject.MainActivity;
 import com.example.beckytang.finalproject.R;
+import com.example.beckytang.finalproject.model.Photo;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 public class GalleryRecyclerAdapter extends
         RecyclerView.Adapter<GalleryRecyclerAdapter.ViewHolder>
         implements GalleryHelperAdapter {
 
-    private List<ImageModel> photoList;
+    private List<Photo> photoList;
     private Context context;
 
-    public GalleryRecyclerAdapter(MainActivity mainActivity, ArrayList<ImageModel> galleryData) {
+    public GalleryRecyclerAdapter(MainActivity mainActivity, ArrayList<Photo> galleryData) {
         photoList = new ArrayList<>();
         photoList = galleryData;
-       // photoList = ImageModel.listAll(ImageModel.class);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
-        View listRow = LayoutInflater.from(context).inflate(R.layout.list_photo,parent,false);
+        View listRow = LayoutInflater.from(context).inflate(R.layout.list_photo, parent, false);
         //defaults to return null
         return new ViewHolder(listRow);
     }
@@ -59,7 +58,7 @@ public class GalleryRecyclerAdapter extends
 
     @Override
     public void onItemDismiss(int position) {
-       // photoList.get(position).delete();
+        // photoList.get(position).delete();
         photoList.remove(position);
         notifyItemRemoved(position);
     }
@@ -98,14 +97,13 @@ public class GalleryRecyclerAdapter extends
     }
 
 
-    public void addItem(ImageModel photo) {
+    public void addItem(Photo photo) {
         //item.save();
         photoList.add(photo);
         int position = getItemCount() + 1;
         // refresh only one position
         notifyItemInserted(position);
     }
-
 
 
 }

@@ -5,20 +5,17 @@ import android.os.Parcelable;
 
 public class Photo implements Parcelable {
 
-    private String name;
+    private String photoName;
     private String userUid; // use for finding all photos from one person
+    private String url;
 
     public Photo() {
     }
 
-    public Photo(String name, String userUid) {
-        this.name = name;
-        this.userUid = userUid;
-    }
-
     protected Photo(Parcel in) {
-        name = in.readString();
+        photoName = in.readString();
         userUid = in.readString();
+        url = in.readString();
     }
 
     public static final Creator<Photo> CREATOR = new Creator<Photo>() {
@@ -33,12 +30,28 @@ public class Photo implements Parcelable {
         }
     };
 
-    public String getName() {
-        return name;
+    public String getPhotoName() {
+        return photoName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
+    }
+
+    public String getUserUid() {
+        return userUid;
+    }
+
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Override
@@ -48,7 +61,8 @@ public class Photo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
+        dest.writeString(photoName);
         dest.writeString(userUid);
+        dest.writeString(url);
     }
 }

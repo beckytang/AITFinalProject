@@ -7,7 +7,6 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -29,8 +28,6 @@ import com.bumptech.glide.Glide;
 import com.example.beckytang.finalproject.model.Album;
 import com.example.beckytang.finalproject.adapter.GalleryRecyclerAdapter;
 import com.example.beckytang.finalproject.adapter.GalleryTouchHelper;
-import com.example.beckytang.finalproject.adapter.ImageModel;
-import com.example.beckytang.finalproject.model.DetailActivity;
 import com.example.beckytang.finalproject.model.Photo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,7 +51,7 @@ public class MainActivity extends BaseActivity
     private GalleryRecyclerAdapter galleryRecyclerAdapter;
     private RecyclerView recyclerList;
 
-    ArrayList<ImageModel> galleryData = new ArrayList<>();
+    ArrayList<Photo> galleryData = new ArrayList<>();
     public static String IMGS[] = {
             "https://images.unsplash.com/photo-1444090542259-0af8fa96557e?q=80&fm=jpg&w=1080&fit=max&s=4b703b77b42e067f949d14581f35019b",
             "https://images.unsplash.com/photo-1439546743462-802cabef8e97?dpr=2&fit=crop&fm=jpg&h=725&q=50&w=1300",
@@ -104,10 +101,10 @@ public class MainActivity extends BaseActivity
 
         for (int i = 0; i < IMGS.length; i++) {
             //adding images and title to POJO class and storing into array
-            ImageModel imageModel = new ImageModel();
-            imageModel.setPhotoName("Image " + i);
-            imageModel.setUrl(IMGS[i]);
-            galleryData.add(imageModel);
+            Photo photo = new Photo();
+            photo.setPhotoName("Image " + i);
+            photo.setUrl(IMGS[i]);
+            galleryData.add(photo);
         }
 
         recyclerList = (RecyclerView) findViewById(R.id.recyclerList);
@@ -242,9 +239,9 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    private Photo createPhoto(String url) {
+    /*private Photo createPhoto(String url) {
         return new Photo(url, getUid());
-    }
+    }*/
 
     private void setIvSrc(String url) {
         Glide.with(MainActivity.this)
@@ -287,7 +284,7 @@ public class MainActivity extends BaseActivity
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 String downloadUrl = taskSnapshot.getDownloadUrl().toString();
-                createPhoto(downloadUrl);
+                //createPhoto(downloadUrl);
                 setIvSrc(downloadUrl);
                 hideProgressDialog();
             }
