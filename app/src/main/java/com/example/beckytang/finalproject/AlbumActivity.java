@@ -5,13 +5,16 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.example.beckytang.finalproject.adapter.GalleryRecyclerAdapter;
 import com.example.beckytang.finalproject.adapter.GalleryTouchHelper;
+import com.example.beckytang.finalproject.model.AlbumList;
 import com.example.beckytang.finalproject.model.Photo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by beckytang on 12/10/16.
@@ -22,18 +25,16 @@ public class AlbumActivity extends BaseActivity {
     private RecyclerView recyclerList;
 
     ArrayList<Photo> galleryData = new ArrayList<>();
-    public static String IMGS[] = {
-            "https://images.unsplash.com/photo-1444090542259-0af8fa96557e?q=80&fm=jpg&w=1080&fit=max&s=4b703b77b42e067f949d14581f35019b",
-            "https://images.unsplash.com/photo-1439546743462-802cabef8e97?dpr=2&fit=crop&fm=jpg&h=725&q=50&w=1300",
-            "https://images.unsplash.com/photo-1441155472722-d17942a2b76a?q=80&fm=jpg&w=1080&fit=max&s=80cb5dbcf01265bb81c5e8380e4f5cc1",
-            // Your image URLs here
-    };
+    public List<String> photoUrls;
 
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-        setContentView(R.layout.activity_main); //not sure about this one
+        setContentView(R.layout.activity_album); //not sure about this one
         String albumName = getIntent().getStringExtra(MainActivity.KEY_GALLERY_NAME);
+        int albumPos = getIntent().getIntExtra(MainActivity.KEY_ALBUM_POS, 0);
+
+        photoUrls = AlbumList.albumList.get(albumPos).getPhotoUrls();
 
         //find corresponding album in array
         //get urls and add to IMGS
@@ -42,12 +43,13 @@ public class AlbumActivity extends BaseActivity {
     }
 
     private void setUpGallery() {
-        for (int i = 0; i < IMGS.length; i++) {
+        for (String url : photoUrls) {
             //adding images and title to POJO class and storing into array
             Photo photo = new Photo();
-            photo.setPhotoName("Image " + i);
-            photo.setUrl(IMGS[i]);
+            photo.setPhotoName("Cloud cloud");
+            photo.setUrl(url);
             galleryData.add(photo);
+            Log.d("TAG_URL", url);
         }
 
         recyclerList = (RecyclerView) findViewById(R.id.recyclerList);
@@ -70,6 +72,5 @@ public class AlbumActivity extends BaseActivity {
 
                     }
                 }));
-        finish(); //lol does this go here
     }
 }

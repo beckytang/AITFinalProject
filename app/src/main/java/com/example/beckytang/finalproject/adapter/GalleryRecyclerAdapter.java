@@ -27,7 +27,6 @@ public class GalleryRecyclerAdapter extends
     private Context context;
 
     public GalleryRecyclerAdapter(AlbumActivity albumActivity, ArrayList<Photo> galleryData) {
-        photoList = new ArrayList<>();
         photoList = galleryData;
     }
 

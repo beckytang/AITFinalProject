@@ -10,24 +10,23 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.FileProvider;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.beckytang.finalproject.model.Album;
 import com.example.beckytang.finalproject.adapter.GalleryRecyclerAdapter;
-import com.example.beckytang.finalproject.adapter.GalleryTouchHelper;
+import com.example.beckytang.finalproject.model.Album;
 import com.example.beckytang.finalproject.model.AlbumList;
 import com.example.beckytang.finalproject.model.Photo;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -49,10 +48,12 @@ import java.util.Date;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String KEY_ALBUM_POS = "KEY_ALBUM_POS";
     private GalleryRecyclerAdapter galleryRecyclerAdapter;
     private RecyclerView recyclerList;
     public static final String KEY_GALLERY_NAME = "KEY_GALLERY_NAME";
 
+    /*
     ArrayList<Photo> galleryData = new ArrayList<>();
     public static String IMGS[] = {
             "https://images.unsplash.com/photo-1444090542259-0af8fa96557e?q=80&fm=jpg&w=1080&fit=max&s=4b703b77b42e067f949d14581f35019b",
@@ -65,9 +66,9 @@ public class MainActivity extends BaseActivity
             "https://images.unsplash.com/photo-1433616174899-f847df236857?dpr=2&fit=crop&fm=jpg&h=725&q=50&w=1300",
             "https://images.unsplash.com/photo-1438480478735-3234e63615bb?dpr=2&fit=crop&fm=jpg&h=725&q=50&w=1300",
             "https://images.unsplash.com/photo-1438027316524-6078d503224b?dpr=2&fit=crop&fm=jpg&h=725&q=50&w=1300"
-        // Your image URLs here
+            // Your image URLs here
     };
-
+*/
 
     public static final int REQUEST_TAKE_PHOTO = 1;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -105,7 +106,7 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-       // setUpGallery();
+        // setUpGallery();
 
         ivNewPicture = (ImageView) findViewById(R.id.ivNewPicture);
     }
@@ -178,7 +179,8 @@ public class MainActivity extends BaseActivity
         if (id == R.id.nav_take_photo) {
             dispatchTakePictureIntent();
         } else if (id == R.id.nav_map) {
-            startActivity(new Intent(this, MapsActivity.class));
+            accessGallery = 1;
+            dispatchChooseAlbumIntent();
         } else if (id == R.id.nav_slideshow) {
             Glide.with(this)
                     .load("http://www.w3schools.com/css/trolltunga.jpg")
@@ -233,34 +235,38 @@ public class MainActivity extends BaseActivity
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            if (tookPicture == 1) {
-                tookPicture = 0;
-                if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                    dispatchChooseAlbumIntent();
-                }
 
-                if (requestCode == REQUEST_CODE_ALBUM) {
-                    albumPos = data.getIntExtra(MapsActivity.KEY_ALBUM, 0);
-                    album = AlbumList.albumList.get(albumPos);
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                dispatchChooseAlbumIntent();
+            }
 
+            if (requestCode == REQUEST_CODE_ALBUM) {
+                albumPos = data.getIntExtra(MapsActivity.KEY_ALBUM, 0);
+                album = AlbumList.albumList.get(albumPos);
+                albumName = album.getName();
+                Log.d("TAG_BLAH", albumName+"BEFORE");
+
+                if (tookPicture == 1) {
+                    tookPicture = 0;
                     try {
                         storePictureFB(fileName, mCurrentPhotoPath);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
+                } else if (accessGallery == 1) {
+                    Log.d("TAG_BLAH", albumName+"AFTER");
+                    accessGallery = 0;
+                    Intent intentAlbumGallery = new Intent();
+                    intentAlbumGallery.setClass(MainActivity.this, AlbumActivity.class);
+                    intentAlbumGallery.putExtra(KEY_GALLERY_NAME, albumName);
+                    intentAlbumGallery.putExtra(KEY_ALBUM_POS, albumPos);
+                    startActivity(intentAlbumGallery);
                 }
-            } else if (accessGallery == 1) {
-                accessGallery = 0;
-                albumPos = data.getIntExtra(MapsActivity.KEY_ALBUM, 0);
-                album = AlbumList.albumList.get(albumPos);
-                albumName = album.getName();
-                Intent intentAlbumGallery = new Intent();
-                intentAlbumGallery.setClass(this, AlbumActivity.class);
-                intentAlbumGallery.putExtra(KEY_GALLERY_NAME, albumName);
-                startActivity(intentAlbumGallery);
             }
         }
     }
+
+
 
     /*private Photo createPhoto(String url) {
         return new Photo(url, getUid());

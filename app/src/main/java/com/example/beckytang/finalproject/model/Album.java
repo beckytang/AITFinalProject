@@ -54,4 +54,8 @@ public class Album{
     public void addPhotoUrl(String url) {
         photoUrls.add(url);
     }
+
+    public List<String> getPhotoUrls() {
+        return photoUrls;
+    }
 }
