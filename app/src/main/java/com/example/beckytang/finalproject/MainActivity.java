@@ -50,6 +50,7 @@ public class MainActivity extends BaseActivity
 
     private GalleryRecyclerAdapter galleryRecyclerAdapter;
     private RecyclerView recyclerList;
+    public static final String KEY_GALLERY_NAME = "KEY_GALLERY_NAME";
 
     ArrayList<Photo> galleryData = new ArrayList<>();
     public static String IMGS[] = {
@@ -75,6 +76,8 @@ public class MainActivity extends BaseActivity
     private String fileName;
     private Album album;
     private String albumName;
+    private int tookPicture = 0;
+    private int accessGallery = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,12 +103,12 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        setUpGallery();
+       // setUpGallery();
 
         ivNewPicture = (ImageView) findViewById(R.id.ivNewPicture);
     }
 
-    private void setUpGallery() {
+  /*  private void setUpGallery() {
         for (int i = 0; i < IMGS.length; i++) {
             //adding images and title to POJO class and storing into array
             Photo photo = new Photo();
@@ -134,7 +137,7 @@ public class MainActivity extends BaseActivity
 
                     }
                 }));
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -221,25 +224,37 @@ public class MainActivity extends BaseActivity
         );
         mCurrentPhotoPath = image.getAbsolutePath();
         fileName = imageFileName;
+        tookPicture = 1;
         return image;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-
-            if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                dispatchChooseAlbumIntent();
-            }
-
-            if (requestCode == REQUEST_CODE_ALBUM) {
-                albumName = data.getStringExtra(MapsActivity.KEY_ALBUM);
-
-                try {
-                    storePictureFB(fileName, mCurrentPhotoPath);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+            if (tookPicture == 1) {
+                tookPicture = 0;
+                if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                    dispatchChooseAlbumIntent();
                 }
+
+                if (requestCode == REQUEST_CODE_ALBUM) {
+                    albumName = data.getStringExtra(MapsActivity.KEY_ALBUM);
+
+                    try {
+                        storePictureFB(fileName, mCurrentPhotoPath);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            else if (accessGallery == 1) {
+                accessGallery = 0;
+                albumName = data.getStringExtra(MapsActivity.KEY_ALBUM);
+                Intent intentAlbumGallery  = new Intent();
+                intentAlbumGallery.setClass(this, AlbumActivity.class);
+
+                intentAlbumGallery.putExtra(KEY_GALLERY_NAME, albumName);
+                startActivity(intentAlbumGallery);
             }
         }
     }
