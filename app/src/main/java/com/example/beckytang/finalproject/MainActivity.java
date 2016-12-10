@@ -28,6 +28,7 @@ import com.bumptech.glide.Glide;
 import com.example.beckytang.finalproject.model.Album;
 import com.example.beckytang.finalproject.adapter.GalleryRecyclerAdapter;
 import com.example.beckytang.finalproject.adapter.GalleryTouchHelper;
+import com.example.beckytang.finalproject.model.AlbumList;
 import com.example.beckytang.finalproject.model.Photo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -74,7 +75,7 @@ public class MainActivity extends BaseActivity
     private String mCurrentPhotoPath;
     private String fileName;
     private Album album;
-    private String albumName;
+    private int albumPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,7 +234,8 @@ public class MainActivity extends BaseActivity
             }
 
             if (requestCode == REQUEST_CODE_ALBUM) {
-                albumName = data.getStringExtra(MapsActivity.KEY_ALBUM);
+                albumPos = data.getIntExtra(MapsActivity.KEY_ALBUM, 0);
+                album = AlbumList.albumList.get(albumPos);
 
                 try {
                     storePictureFB(fileName, mCurrentPhotoPath);
@@ -262,7 +264,7 @@ public class MainActivity extends BaseActivity
                 storage.getReferenceFromUrl("gs://aitfinalproject.appspot.com");
         StorageReference tempRef = storageRef
                 .child("images")
-                .child(albumName)
+                .child(album.getName())
                 .child(imageFileName);
 
         Bitmap bmp = BitmapFactory.decodeFile(mCurrentPhotoPath);
@@ -290,11 +292,15 @@ public class MainActivity extends BaseActivity
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 String downloadUrl = taskSnapshot.getDownloadUrl().toString();
-                //createPhoto(downloadUrl);
+                addPhotoToAlbum(downloadUrl);
                 setIvSrc(downloadUrl);
                 hideProgressDialog();
             }
         });
+    }
+
+    private void addPhotoToAlbum(String downloadUrl) {
+        album.addPhotoUrl(downloadUrl);
     }
 
     public void dispatchChooseAlbumIntent() {

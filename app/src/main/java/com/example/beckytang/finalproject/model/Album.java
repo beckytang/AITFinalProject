@@ -3,13 +3,15 @@ package com.example.beckytang.finalproject.model;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Album implements Serializable{
+public class Album{
 
     private String name;
     private double latitude;
     private double longitude;
+    private List<String> photoUrls;
 
     public Album() {
     }
@@ -18,6 +20,7 @@ public class Album implements Serializable{
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
+        photoUrls = new ArrayList<>();
     }
 
     public String getName() {
@@ -46,5 +49,9 @@ public class Album implements Serializable{
 
     public LatLng getLocation() {
         return new LatLng(latitude, longitude);
+    }
+
+    public void addPhotoUrl(String url) {
+        photoUrls.add(url);
     }
 }
