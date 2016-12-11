@@ -84,8 +84,6 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ivNewPicture = (ImageView) findViewById(R.id.ivNewPicture);
-
         DatabaseReference databaseReference =
                 FirebaseDatabase.getInstance()
                         .getReference()
@@ -114,8 +112,7 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            Toast.makeText(this, "Author: George Whiteside and Tang Chi Wei",
-                    Toast.LENGTH_SHORT).show();
+
             return true;
         }
 
@@ -132,16 +129,9 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_map) {
             accessGallery = 1;
             dispatchChooseAlbumIntent();
-        } else if (id == R.id.nav_slideshow) {
-            Glide.with(this)
-                    .load("http://www.w3schools.com/css/trolltunga.jpg")
-                    .into(ivNewPicture);
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_about) {
+            Toast.makeText(this, "Author: George Whiteside and Tang Chi Wei",
+                    Toast.LENGTH_SHORT).show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -167,6 +157,7 @@ public class MainActivity extends BaseActivity
             }
         }
     }
+
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -207,21 +198,19 @@ public class MainActivity extends BaseActivity
                 } else if (accessGallery == 1) {
                     Log.d("TAG_BLAH", albumName + "AFTER");
                     accessGallery = 0;
-                    Intent intentAlbumGallery = new Intent();
-                    intentAlbumGallery.setClass(MainActivity.this, AlbumActivity.class);
-                    intentAlbumGallery.putExtra(KEY_GALLERY_NAME, albumName);
-                    intentAlbumGallery.putExtra(KEY_ALBUM_POS, albumPos);
-                    Log.d("TAG_ENTER_ALBUM", "true");
-                    startActivity(intentAlbumGallery);
+                    startAlbumActivity();
                 }
             }
         }
     }
 
-    private void setIvSrc(String url) {
-        Glide.with(MainActivity.this)
-                .load(url)
-                .into(ivNewPicture);
+    private void startAlbumActivity() {
+        Intent intentAlbumGallery = new Intent();
+        intentAlbumGallery.setClass(MainActivity.this, AlbumActivity.class);
+        intentAlbumGallery.putExtra(KEY_GALLERY_NAME, albumName);
+        intentAlbumGallery.putExtra(KEY_ALBUM_POS, albumPos);
+        Log.d("TAG_ENTER_ALBUM", "true");
+        startActivity(intentAlbumGallery);
     }
 
     private void storePictureFB(String imageFileName, String currentPath)
@@ -261,8 +250,8 @@ public class MainActivity extends BaseActivity
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 String downloadUrl = taskSnapshot.getDownloadUrl().toString();
                 addPhotoToAlbum(downloadUrl);
-                setIvSrc(downloadUrl);
                 hideProgressDialog();
+                startAlbumActivity();
             }
         });
     }
