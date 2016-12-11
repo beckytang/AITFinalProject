@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Album{
+public class Album implements Serializable{
 
     private String name;
     private double latitude;
@@ -21,6 +21,7 @@ public class Album{
         this.latitude = latitude;
         this.longitude = longitude;
         photoUrls = new ArrayList<>();
+        photoUrls.add("https://www.sitebuilderreport.com/assets/facebook-stock-up-08c6c9a855df26a3b13a34ac62bb75cc.jpg");
     }
 
     public String getName() {
@@ -57,5 +58,9 @@ public class Album{
 
     public List<String> getPhotoUrls() {
         return photoUrls;
+    }
+
+    public void setPhotoUrls(List<String> photoUrls) {
+        this.photoUrls = photoUrls;
     }
 }

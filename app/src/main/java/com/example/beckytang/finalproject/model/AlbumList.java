@@ -1,15 +1,37 @@
 package com.example.beckytang.finalproject.model;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class AlbumList {
 
-    public static List<Album> albumList = new ArrayList<Album>() {{
-        add(new Album("AIT", 47.562441, 19.054716));
-        add(new Album("Metro", 47.565648, 19.049949));
-        add(new Album("Budapest", 47.509176, 19.076193));
-        add(new Album("Hungary", 47.355107, 19.059543));
-        add(new Album("Greenwich", 0, 0));
-    }};
+    private static List<Album> albumList = new ArrayList<>();
+
+    public static List<Album> getList() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("albums");
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                albumList.add(dataSnapshot.child("AIT").getValue(Album.class));
+                albumList.add(dataSnapshot.child("Metro").getValue(Album.class));
+                albumList.add(dataSnapshot.child("Budapest").getValue(Album.class));
+                albumList.add(dataSnapshot.child("Hungary").getValue(Album.class));
+                albumList.add(dataSnapshot.child("Greenwich").getValue(Album.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return albumList;
+    }
 }

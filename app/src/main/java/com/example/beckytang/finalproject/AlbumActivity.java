@@ -16,25 +16,31 @@ import com.example.beckytang.finalproject.model.Photo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by beckytang on 12/10/16.
- */
-
 public class AlbumActivity extends BaseActivity {
+    public static final String TAG_DATA = "TAG_DATA";
+    public static final String TAG_POS = "TAG_POS";
+    public static final String TAG_ALBUM_NAME = "TAG_ALBUM_NAME";
     private GalleryRecyclerAdapter galleryRecyclerAdapter;
     private RecyclerView recyclerList;
 
     ArrayList<Photo> galleryData = new ArrayList<>();
     public List<String> photoUrls;
+    private String albumName;
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-        setContentView(R.layout.activity_album); //not sure about this one
-        String albumName = getIntent().getStringExtra(MainActivity.KEY_GALLERY_NAME);
-        int albumPos = getIntent().getIntExtra(MainActivity.KEY_ALBUM_POS, 0);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_album);
 
-        photoUrls = AlbumList.albumList.get(albumPos).getPhotoUrls();
+        //String albumName = getIntent().getStringExtra(MainActivity.KEY_GALLERY_NAME);
+        int albumPos = getIntent().getIntExtra(MainActivity.KEY_ALBUM_POS, 0);
+        Log.d("TAG_ALBUM_POS", albumPos+"");
+
+        albumName = AlbumList.getList().get(albumPos).getName();
+        setTitle(albumName);
+
+        photoUrls = AlbumList.getList().get(albumPos).getPhotoUrls();
+        Log.d("TAG_YASSS", photoUrls.get(0));
 
         //find corresponding album in array
         //get urls and add to IMGS
@@ -46,7 +52,7 @@ public class AlbumActivity extends BaseActivity {
         for (String url : photoUrls) {
             //adding images and title to POJO class and storing into array
             Photo photo = new Photo();
-            photo.setPhotoName("Cloud cloud");
+            photo.setPhotoName("example");
             photo.setUrl(url);
             galleryData.add(photo);
             Log.d("TAG_URL", url);
@@ -66,8 +72,9 @@ public class AlbumActivity extends BaseActivity {
                     public void onItemClick(View view, int position) {
 
                         Intent intent = new Intent(AlbumActivity.this, DetailActivity.class);
-                        intent.putParcelableArrayListExtra("data", galleryData);
-                        intent.putExtra("pos", position);
+                        intent.putParcelableArrayListExtra(TAG_DATA, galleryData);
+                        intent.putExtra(TAG_POS, position);
+                        intent.putExtra(TAG_ALBUM_NAME, albumName);
                         startActivity(intent);
 
                     }

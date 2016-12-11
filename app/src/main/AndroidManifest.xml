@@ -37,7 +37,9 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".AlbumActivity"/>
+
+        <activity android:name=".AlbumActivity"
+            android:label="View an album"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -54,9 +56,8 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".DetailActivity"
-            android:label="@string/title_activity_detail"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:name=".DetailActivity"></activity>
+
     </application>
 
 </manifest>

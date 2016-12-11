@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.example.beckytang.finalproject.model.Album;
+import com.example.beckytang.finalproject.model.AlbumList;
 import com.example.beckytang.finalproject.model.Photo;
 
 import java.util.ArrayList;
@@ -23,18 +25,7 @@ public class DetailActivity extends AppCompatActivity {
 
     public ArrayList<Photo> galleryData = new ArrayList<>();
     int pos;
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
 
     @Override
@@ -42,24 +33,24 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        /*
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        */
 
 
-        galleryData = getIntent().getParcelableArrayListExtra("data");
-        pos = getIntent().getIntExtra("pos", 0);
 
-        setTitle(galleryData.get(pos).getPhotoName());
+        galleryData = getIntent().getParcelableArrayListExtra(AlbumActivity.TAG_DATA);
+        pos = getIntent().getIntExtra(AlbumActivity.TAG_POS, 0);
+        String albumName = getIntent().getStringExtra(AlbumActivity.TAG_ALBUM_NAME);
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+        setTitle(albumName);
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), galleryData);
 
-        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(pos);
-
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -69,10 +60,7 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-
-                //noinspection ConstantConditions
-                setTitle(galleryData.get(position).getPhotoName());
-
+                //setTitle(galleryData.get(position).getPhotoName());
             }
 
             @Override
@@ -84,40 +72,28 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_detail, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
     public static class PlaceholderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static final String ARG_IMG_TITLE = "image_title";
         private static final String ARG_IMG_URL = "image_url";
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
 
         String name, url;
         int pos;
@@ -125,10 +101,6 @@ public class DetailActivity extends AppCompatActivity {
         public PlaceholderFragment() {
         }
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
         public static PlaceholderFragment newInstance(int sectionNumber, String name, String url) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -167,10 +139,7 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
         public ArrayList<Photo> galleryData = new ArrayList<>();
 
@@ -181,8 +150,6 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
             return PlaceholderFragment.newInstance(position, galleryData.get(position).getPhotoName(), galleryData.get(position).getUrl());
         }
 
