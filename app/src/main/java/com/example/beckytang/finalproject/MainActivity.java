@@ -88,7 +88,20 @@ public class MainActivity extends BaseActivity
                 FirebaseDatabase.getInstance()
                         .getReference()
                         .child("albums");
-
+/*
+        Album album = new Album("Budapest", 47.509176, 19.076193);
+        album.addPhotoUrl("http://www.budapest.com/w/promoart/promo_999_en.jpg");
+        album.addPhotoUrl("https://s.inyourpocket.com/gallery/108367.jpg");
+        album.addPhotoUrl("http://www.ironman.com/~/media/97592ab782a24dc28fea06447490b76f/budapest%202016%205.jpg?w=1600&h=980&c=1");
+        album.addPhotoUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Parliament_Building,_Budapest,_outside.jpg/303px-Parliament_Building,_Budapest,_outside.jpg");
+        album.addPhotoUrl("https://www.sundaypost.com/wp-content/uploads/sites/13/2015/12/budapest1.jpg");
+        album.addPhotoUrl("http://cdn.goeuro.com/static_content/web/content/destination/Budapest-Header.jpg");
+        album.addPhotoUrl("https://lonelyplanetimages.imgix.net/mastheads/stock-photo-budapest-at-night-part-iii-76226665.jpg?sharp=10&vib=20&w=1200");
+        album.addPhotoUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Sz%C3%A9chenyi_Chain_Bridge_in_Budapest_at_night.jpg/303px-Sz%C3%A9chenyi_Chain_Bridge_in_Budapest_at_night.jpg");
+        album.addPhotoUrl("https://media-cdn.tripadvisor.com/media/photo-s/07/e9/41/4a/aria-hotel-budapest.jpg");
+        album.addPhotoUrl("http://visitbudapest.travel/images/made/images/content/body/budapest-eye-view6_574_383.jpg");
+        databaseReference.child(album.getName()).setValue(album);
+        */
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.example.beckytang.finalproject.adapter.GalleryRecyclerAdapter;
 import com.example.beckytang.finalproject.adapter.GalleryTouchHelper;
+import com.example.beckytang.finalproject.model.Album;
 import com.example.beckytang.finalproject.model.AlbumList;
 import com.example.beckytang.finalproject.model.Photo;
 
@@ -36,11 +37,15 @@ public class AlbumActivity extends BaseActivity {
         int albumPos = getIntent().getIntExtra(MainActivity.KEY_ALBUM_POS, 0);
         Log.d("TAG_ALBUM_POS", albumPos+"");
 
-        albumName = AlbumList.getList().get(albumPos).getName();
+        Album album = AlbumList.getList().get(albumPos);
+        albumName = album.getName();
+        Log.d("TAG_ALBUM_NAME", ""+albumName);
+
         setTitle(albumName);
 
-        photoUrls = AlbumList.getList().get(albumPos).getPhotoUrls();
-        Log.d("TAG_YASSS", photoUrls.get(0));
+        photoUrls = album.getPhotoUrls();
+        Log.d("TAG_URL_LIST", photoUrls.toString());
+        //Log.d("TAG_YASSS", photoUrls.get(0));
 
         //find corresponding album in array
         //get urls and add to IMGS
