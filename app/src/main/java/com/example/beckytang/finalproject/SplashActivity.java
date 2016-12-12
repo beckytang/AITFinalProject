@@ -16,7 +16,6 @@ public class SplashActivity extends AppCompatActivity {
     private int timerTime = 1000;
     private Animation shutterUpAnim;
     private Animation shutterDownAnim;
-    // private ImageView ivLogo;
     private TextView tvTopShutter;
     private TextView tvBottomShutter;
     private boolean startAnimation;
@@ -28,7 +27,6 @@ public class SplashActivity extends AppCompatActivity {
 
         t = new Timer();
 
-        // ivLogo = (ImageView) findViewById(R.id.ivLogo);
         shutterUpAnim = AnimationUtils.loadAnimation(this, R.anim.translate_up);
         shutterDownAnim = AnimationUtils.loadAnimation(this, R.anim.translate_down);
         tvTopShutter = (TextView) findViewById(R.id.tvTopShutter);

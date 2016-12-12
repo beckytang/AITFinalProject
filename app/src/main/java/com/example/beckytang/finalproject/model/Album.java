@@ -63,4 +63,5 @@ public class Album implements Serializable{
     public void setPhotoUrls(List<String> photoUrls) {
         this.photoUrls = photoUrls;
     }
+
 }

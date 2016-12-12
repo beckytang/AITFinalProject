@@ -2,7 +2,6 @@ package com.example.beckytang.finalproject;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -33,29 +32,20 @@ public class AlbumActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album);
 
-        //String albumName = getIntent().getStringExtra(MainActivity.KEY_GALLERY_NAME);
         int albumPos = getIntent().getIntExtra(MainActivity.KEY_ALBUM_POS, 0);
-        Log.d("TAG_ALBUM_POS", albumPos+"");
 
         Album album = AlbumList.getList().get(albumPos);
         albumName = album.getName();
-        Log.d("TAG_ALBUM_NAME", ""+albumName);
 
         setTitle(albumName);
 
         photoUrls = album.getPhotoUrls();
-        Log.d("TAG_URL_LIST", photoUrls.toString());
-        //Log.d("TAG_YASSS", photoUrls.get(0));
-
-        //find corresponding album in array
-        //get urls and add to IMGS
 
         setUpGallery();
     }
 
     private void setUpGallery() {
         for (String url : photoUrls) {
-            //adding images and title to POJO class and storing into array
             Photo photo = new Photo();
             photo.setPhotoName("example");
             photo.setUrl(url);
@@ -67,7 +57,7 @@ public class AlbumActivity extends BaseActivity {
         recyclerList.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerList.setHasFixedSize(true); //for improved performance i guess
 
-        galleryRecyclerAdapter = new GalleryRecyclerAdapter(AlbumActivity.this, galleryData);
+        galleryRecyclerAdapter = new GalleryRecyclerAdapter(galleryData);
         recyclerList.setAdapter(galleryRecyclerAdapter);
 
         recyclerList.addOnItemTouchListener(new GalleryTouchHelper(this,
@@ -85,4 +75,5 @@ public class AlbumActivity extends BaseActivity {
                     }
                 }));
     }
+
 }

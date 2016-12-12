@@ -33,13 +33,6 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        /*
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        */
-
-
-
         galleryData = getIntent().getParcelableArrayListExtra(AlbumActivity.TAG_DATA);
         pos = getIntent().getIntExtra(AlbumActivity.TAG_POS, 0);
         String albumName = getIntent().getStringExtra(AlbumActivity.TAG_ALBUM_NAME);
@@ -60,7 +53,7 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                //setTitle(galleryData.get(position).getPhotoName());
+
             }
 
             @Override
@@ -71,24 +64,6 @@ public class DetailActivity extends AppCompatActivity {
 
 
     }
-
-/*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_detail, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
 
     public static class PlaceholderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
@@ -155,7 +130,6 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
             return galleryData.size();
         }
 

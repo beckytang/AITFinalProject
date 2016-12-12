@@ -51,8 +51,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnMarkerClickListener(this);
-        // ADD LOADING UNITL FIRST LOCATION UPDATE
-
     }
 
     public void requestNeededPermission() {
@@ -107,8 +105,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.clear();
 
-        // mMap.setMyLocationEnabled(true);
-        // ADD CURRENT LOCATION MARKER
         if (firstLocationUpdate) {
             firstLocationUpdate = false;
             mMap.moveCamera(CameraUpdateFactory.newLatLng(mLatLng));

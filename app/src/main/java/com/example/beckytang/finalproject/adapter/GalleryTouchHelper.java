@@ -2,7 +2,6 @@ package com.example.beckytang.finalproject.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,13 +35,14 @@ public class GalleryTouchHelper implements RecyclerView.OnItemTouchListener {
         return false;
     }
 
-
     @Override
     public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
     }
 
     @Override
     public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
     }
+
 }

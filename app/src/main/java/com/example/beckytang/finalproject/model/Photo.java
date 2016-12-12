@@ -6,7 +6,7 @@ import android.os.Parcelable;
 public class Photo implements Parcelable {
 
     private String photoName;
-    private String userUid; // use for finding all photos from one person
+    private String userUid;
     private String url;
 
     public Photo() {
@@ -65,4 +65,5 @@ public class Photo implements Parcelable {
         dest.writeString(userUid);
         dest.writeString(url);
     }
+
 }

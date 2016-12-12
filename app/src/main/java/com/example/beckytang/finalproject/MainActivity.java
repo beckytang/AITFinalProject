@@ -23,7 +23,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.beckytang.finalproject.model.Album;
 import com.example.beckytang.finalproject.model.AlbumList;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -51,7 +50,6 @@ public class MainActivity extends BaseActivity
     public static final int REQUEST_TAKE_PHOTO = 1;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int REQUEST_CODE_ALBUM = 2;
-    private ImageView ivNewPicture;
     private String mCurrentPhotoPath;
     private String fileName;
     private Album album;
@@ -83,25 +81,6 @@ public class MainActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        DatabaseReference databaseReference =
-                FirebaseDatabase.getInstance()
-                        .getReference()
-                        .child("albums");
-/*
-        Album album = new Album("Budapest", 47.509176, 19.076193);
-        album.addPhotoUrl("http://www.budapest.com/w/promoart/promo_999_en.jpg");
-        album.addPhotoUrl("https://s.inyourpocket.com/gallery/108367.jpg");
-        album.addPhotoUrl("http://www.ironman.com/~/media/97592ab782a24dc28fea06447490b76f/budapest%202016%205.jpg?w=1600&h=980&c=1");
-        album.addPhotoUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Parliament_Building,_Budapest,_outside.jpg/303px-Parliament_Building,_Budapest,_outside.jpg");
-        album.addPhotoUrl("https://www.sundaypost.com/wp-content/uploads/sites/13/2015/12/budapest1.jpg");
-        album.addPhotoUrl("http://cdn.goeuro.com/static_content/web/content/destination/Budapest-Header.jpg");
-        album.addPhotoUrl("https://lonelyplanetimages.imgix.net/mastheads/stock-photo-budapest-at-night-part-iii-76226665.jpg?sharp=10&vib=20&w=1200");
-        album.addPhotoUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Sz%C3%A9chenyi_Chain_Bridge_in_Budapest_at_night.jpg/303px-Sz%C3%A9chenyi_Chain_Bridge_in_Budapest_at_night.jpg");
-        album.addPhotoUrl("https://media-cdn.tripadvisor.com/media/photo-s/07/e9/41/4a/aria-hotel-budapest.jpg");
-        album.addPhotoUrl("http://visitbudapest.travel/images/made/images/content/body/budapest-eye-view6_574_383.jpg");
-        databaseReference.child(album.getName()).setValue(album);
-        */
     }
 
     @Override
@@ -143,7 +122,7 @@ public class MainActivity extends BaseActivity
             accessGallery = 1;
             dispatchChooseAlbumIntent();
         } else if (id == R.id.nav_about) {
-            Toast.makeText(this, "Author: George Whiteside and Tang Chi Wei",
+            Toast.makeText(this, R.string.about_message,
                     Toast.LENGTH_SHORT).show();
         }
 
@@ -199,8 +178,6 @@ public class MainActivity extends BaseActivity
                 albumPos = data.getIntExtra(MapsActivity.KEY_ALBUM, 0);
                 album = AlbumList.getList().get(albumPos);
                 albumName = album.getName();
-                Log.d("TAG_BLAH", albumName + "BEFORE");
-
                 if (tookPicture == 1) {
                     tookPicture = 0;
                     try {
@@ -209,7 +186,6 @@ public class MainActivity extends BaseActivity
                         e.printStackTrace();
                     }
                 } else if (accessGallery == 1) {
-                    Log.d("TAG_BLAH", albumName + "AFTER");
                     accessGallery = 0;
                     startAlbumActivity();
                 }
@@ -222,7 +198,6 @@ public class MainActivity extends BaseActivity
         intentAlbumGallery.setClass(MainActivity.this, AlbumActivity.class);
         intentAlbumGallery.putExtra(KEY_GALLERY_NAME, albumName);
         intentAlbumGallery.putExtra(KEY_ALBUM_POS, albumPos);
-        Log.d("TAG_ENTER_ALBUM", "true");
         startActivity(intentAlbumGallery);
     }
 
@@ -254,7 +229,7 @@ public class MainActivity extends BaseActivity
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(MainActivity.this, "There was a problem uploading your photo",
+                Toast.makeText(MainActivity.this, R.string.upload_error,
                         Toast.LENGTH_SHORT).show();
                 hideProgressDialog();
             }

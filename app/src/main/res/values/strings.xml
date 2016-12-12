@@ -13,4 +13,6 @@
     <string name="nav_header_subtext">Welcome to our haus. We hope you enjoy ur stay</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="upload_error">There was a problem uploading your photo</string>
+    <string name="about_message">Author: George Whiteside and Tang Chi Wei</string>
 </resources>
